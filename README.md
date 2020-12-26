@@ -9,6 +9,7 @@ webcam eye gesture detection using dlib and opencv(only blinking and squinting)
 * dlib == 19.21.1
 * numpy == 1.19.4
 * imutils == 0.5.3
+* matplotlib==3.3.2
  
 # Installation
  i used pip
