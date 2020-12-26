@@ -4,8 +4,6 @@ webcam eye gesture detection using dlib and opencv(only blinking and squinting)
  
 # Requirement
  
-"hoge"を動かすのに必要なライブラリなどを列挙する
- 
 * python 3.7.9
 * opencv == 3.4.5.20
 * dlib == 19.21.1
