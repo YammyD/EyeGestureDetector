@@ -1,0 +1,5 @@
+matplotlib==3.3.2
+imutils==0.5.3
+opencv_python==3.4.5.20
+dlib==19.21.1
+numpy==1.19.4
