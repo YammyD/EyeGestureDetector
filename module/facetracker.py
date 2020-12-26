@@ -72,7 +72,7 @@ class FaceTracker(object):
             if(self.eye_blinking()):
                 self.prev_blink=0
                 self.state=4
-            elif(self.eye_gazing() and self.prev_blink>9):
+            elif(self.eye_gazing() and self.prev_blink>6):
                 self.state=3
             else:
                 self.state=2
@@ -88,8 +88,8 @@ class FaceTracker(object):
             landmarks = face_utils.shape_to_np(self.landmarks)
             for(x,y) in landmarks:
                 cv2.circle(tmp, (x, y), 1, (0, 0, 255), -1)
-            tmp=self.eye_left.annotated_frame(tmp)
-            tmp=self.eye_right.annotated_frame(tmp)
+            #tmp=self.eye_left.annotated_frame(tmp)
+            #tmp=self.eye_right.annotated_frame(tmp)
             tmp=self.calibration.annotated_frame(tmp)
 
         return tmp

@@ -32,9 +32,9 @@ class Eye(object):
 
     def is_blinking(self):
         if(self.side==0):
-            return self.ratio>self.calibration.thres_blink_left
+            return self.calibration.max_latest(self.side)>self.calibration.thres_blink_left
         elif(self.side==1):
-            return self.ratio>self.calibration.thres_blink_right
+            return self.calibration.max_latest(self.side)>self.calibration.thres_blink_right
 
     def is_gazing(self):
         if(self.side==0):

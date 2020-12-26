@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class Calibration(object):
     def __init__(self):
         #for initial calibration
-        self.num_init = 30
+        self.num_init = 10
         self.initial_ratios_left = []
         self.initial_ratios_right = []
 
@@ -58,6 +58,15 @@ class Calibration(object):
         except Exception:
             return 0
 
+    def max_latest(self,side):
+        try:
+            if side == 0:
+                return max(self.latest_ratios_left)
+            elif side == 1:
+                return max(self.latest_ratios_right)
+        except Exception:
+            return 0
+
     #no realtime calibration for now
     def update_list(self,side,ratio):
         if(self.is_complete()):
@@ -87,10 +96,10 @@ class Calibration(object):
     def set_thres(self):
         min_left=min(self.initial_ratios_left)
         min_right=min(self.initial_ratios_right)
-        self.thres_blink_left=min_left*8.0
-        self.thres_blink_right=min_right*8.0
-        self.thres_gaze_left=min_left*5.0
-        self.thres_gaze_right=min_right*5.0
+        self.thres_blink_left=min_left*8.5
+        self.thres_blink_right=min_right*8.5
+        self.thres_gaze_left=min_left*6.0
+        self.thres_gaze_right=min_right*6.0
 
     def is_complete(self):
         return len(self.initial_ratios_left) >= self.num_init and len(self.initial_ratios_right) >= self.num_init
