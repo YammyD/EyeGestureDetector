@@ -14,7 +14,6 @@ class Eye(object):
         self.calibration=calibration
         self.side=side
         self.ratio=None
-        self.origin=None
         self._analyze(landmarks, side, calibration)
 
     def _analyze(self, landmarks, side, calibration):
@@ -27,11 +26,21 @@ class Eye(object):
         self.region = np.array([(landmarks.part(point).x, landmarks.part(point).y) for point in points])
         self.region = self.region.astype(np.int32)
 
-        self.origin=(np.min(self.region[:, 0]), np.min(self.region[:, 1]))
-
         self.ratio = self.calc_wh_ratio(self.region)
-        self.calibration.update(side, self.ratio)
 
+        self.calibration.update_list(side, self.ratio)
+
+    def is_blinking(self):
+        if(self.side==0):
+            return self.ratio>self.calibration.thres_blink_left
+        elif(self.side==1):
+            return self.ratio>self.calibration.thres_blink_right
+
+    def is_gazing(self):
+        if(self.side==0):
+            return self.calibration.sum_latest(self.side)>self.calibration.thres_gaze_left
+        if(self.side==1):
+            return self.calibration.sum_latest(self.side)>self.calibration.thres_gaze_right
 
     @staticmethod
     def _middle_point(p1, p2):
@@ -51,17 +60,18 @@ class Eye(object):
         try:
             ratio = eye_width / eye_height
         except ZeroDivisionError:
-            ratio = None
+            ratio = 50
 
         return ratio
-
-    def calc_area(self, region):
-        region=np.transpose(region)
-        return 0.5*np.abs(np.dot(region[0],np.roll(region[1],1))-np.dot(region[1],np.roll(region[0],1)))
 
     def annotated_frame(self,frame):
         tmp = frame.copy()
         for(x,y) in self.region:
             cv2.circle(tmp, (x, y), 2, (255, 0, 255), -1)
+        text="ratio"+str(self.side)+": "+str(self.ratio)
+        cv2.putText(tmp, text, (20, 60+self.side*20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 0), thickness=2)
+        text="sum_latest3frames: "+str(self.side)+": "+str(self.calibration.sum_latest(self.side))
+        cv2.putText(tmp, text, (20, 100+self.side*20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 0), thickness=2)
+        
         return tmp
         

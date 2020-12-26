@@ -1,17 +1,20 @@
 import cv2
 import dlib
-
 import numpy as np
-
 from module import *
+import time
+import matplotlib.pyplot as plt
 
 if __name__=="__main__":
     #execute v4l2-ctl -d /dev/video0 --list-formats-ext
     #for possible resolution and fps
     DEVICE_ID = 0
-    WIDTH = 800
-    HEIGHT = 600
+    WIDTH = 640
+    HEIGHT = 480
     FPS=30
+
+    #MAX_FPS=10
+    #DELAY=1000/MAX_FPS
 
     #Capture
     cap=cv2.VideoCapture(DEVICE_ID)
@@ -34,7 +37,7 @@ if __name__=="__main__":
         #debug
         #tracker.calibration.show_graph_as_image()
 
-        state=tracker.getState()
+        state=tracker.state
         text=STATE[state]
         cv2.putText(frame, text,(30,HEIGHT-30),cv2.FONT_HERSHEY_DUPLEX, 2.0, (147, 58, 31), 2)
 
